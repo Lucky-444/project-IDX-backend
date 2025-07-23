@@ -1,8 +1,8 @@
 import fs from "fs/promises";
 import uuid4 from "uuid4";
 import { execPromisified } from "../utils/execUtility.js";
-import path from "path";
-import directoryTree from 'directory-tree'
+import path from 'path';
+import directoryTree from "directory-tree";
 export const createProjectService = async () => {
   //   const { stdout, stderr } = await execPromisified('dir');
   //   console.log("stdout:", stdout);
@@ -45,7 +45,12 @@ export const createProjectService = async () => {
 };
 
 export const getProjectTreeService = async (projectId) => {
-  const projectPath = path.resolve(`projects/${projectId}`);
+  const projectPath = path.resolve(`./projects/${projectId}`);
+  console.log("📁 Resolved project path:", projectPath);
+
   const tree = directoryTree(projectPath);
+  console.log("🌳 Directory tree:", tree);
+
   return tree;
 };
+

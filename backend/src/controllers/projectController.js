@@ -11,6 +11,8 @@ export const createProjectController = async (req, res) => {
 
 export const getProjectTreeController = async (req, res) => {
   const projectTree = await getProjectTreeService(req.params.projectId);
+  console.log("Project Tree Is ->" ,projectTree);
+  
   return res.json({
     message: "Project Tree Retrieved Successfully",
     data: projectTree,
