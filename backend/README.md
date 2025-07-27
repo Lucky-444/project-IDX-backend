@@ -22,3 +22,16 @@ and websocket protocol to connect with client with websocket protocol
 Event-driven mechanism is a programming paradigm that is based on the concept of events and event handlers. In this paradigm, the program is divided into a series of events that are triggered by user interactions or other
 external factors. Each event is handled by a separate function or method, which is responsible for performing the necessary actions.
 
+
+
+## adding chokidar for consistent connection with our file
+***npm i chokidar*** install it
+
+
+//if any changes happen in file it suddenly active
+//like name  -> work same
+
+Events are properly reported
+macOS events report filenames
+events are not reported twice
+changes are reported as add / change / unlink instead of useless rename
