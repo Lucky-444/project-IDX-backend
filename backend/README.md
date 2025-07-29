@@ -35,3 +35,15 @@ Events are properly reported
 macOS events report filenames
 events are not reported twice
 changes are reported as add / change / unlink instead of useless rename
+
+
+### After significantly typed by user then it will be reported to our backend
+for every character we are not call to the backend
+only when user stop typing then it will be reported to our backend
+the pause of the user is emitted to the backend
+this concept is called as debouncing
+# Debouncing
+Debouncing is a technique used to prevent excessive function calls or API requests when a user interacts with a UI element, such as a text input field. It works by delaying the execution of a function or API request until a certain amount of time has passed since the last user interaction. This helps to prevent unnecessary function calls or API requests, which can improve performance and reduce the load on
+the server.
+
+
