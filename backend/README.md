@@ -46,4 +46,43 @@ this concept is called as debouncing
 Debouncing is a technique used to prevent excessive function calls or API requests when a user interacts with a UI element, such as a text input field. It works by delaying the execution of a function or API request until a certain amount of time has passed since the last user interaction. This helps to prevent unnecessary function calls or API requests, which can improve performance and reduce the load on
 the server.
 
+### ForkBomb -> 
+A fork bomb is a type of denial-of-service (DoS) attack on a system, where a malicious or careless program repeatedly replicates itself to exhaust system resources, like CPU time and process table entries.
 
+A fork bomb creates new processes in a loop, and each of those processes creates more processes, rapidly overwhelming the system.
+
+infinite Number of system calls are executed
+and this cause to failure of RAM 
+
+### for live terminal we use Xterm
+
+
+# A simple Library Which create a Docker image is -> dockerode
+***npm i dockerode*** install it
+# Dockerode
+Dockerode is a Node.js library that allows you to interact with Docker from your Node.js application
+It provides a simple and intuitive API for creating, managing, and removing Docker containers, images, and
+networks.
+
+# Steps to turn up a docker conatiner after creating a projects
+
+1 . setUp the docker image
+***docker build -t sandbox***
+
+run docker desktop
+***docker run -it sandbox***
+
+
+## socket connection for terminal using raw websocket connection
+https://www.npmjs.com/package/ws
+
+both websocket and https connections are works on TCP
+firstly we need to establish a connection with the server The TCP connection setup first
+then after TCP connection upgrade to a pipelining(WebSocket Connection);
+
+# read about how to connect the web browser using docker 
+in terminal of the project do npm run dev
+it will start the server
+then open the browser and type localhost:3000 you can not get the page
+so that you run `npm run dev -- --host 0.0.0.0` in the terminal
+read about vite  --host flag

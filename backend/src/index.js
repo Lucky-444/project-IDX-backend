@@ -1,5 +1,6 @@
 import express from "express";
 import cors from "cors";
+import { WebSocketServer } from "ws";
 import { PORT } from "./config/serverConfig.js";
 import apiRouter from "./routes/index.js";
 import { Server } from "socket.io";
@@ -7,6 +8,8 @@ import { createServer } from "node:http";
 import chokidar from "chokidar";
 import path from "node:path";
 import { handleEditorSocketEvents } from "./socketHandlers/editorHandler.js";
+import { handleContainerCreate } from "./containers/handleContainerCreate.js";
+import { handleTerminalCreation } from "./containers/handleTerminalCreation.js";
 const app = express();
 
 const server = createServer(app);
@@ -56,14 +59,64 @@ editorNamespace.on("connection", (socket) => {
   }
 
   handleEditorSocketEvents(socket, editorNamespace);
-
-  // socket.on("disconnect", async () => {
-  //     await watcher.close();
-  //     console.log("editor disconnected");
-
-  // });
 });
 
 server.listen(PORT, () => {
   console.log(`server is runnig on PORT ${PORT}`);
+});
+
+const webSocketForTerminal = new WebSocketServer({
+  noServer: true /**we will handle the upgrade of event  */,
+});
+
+server.on("upgrade", (req, tcpSocket, head) => {
+  /***
+   * req : incoming request http request
+   * socket : TCP connection socket
+   * head : Buffer contain the first packet of the upgrade stream
+   */
+  /**This callBack will calll when a client tries to connect to the server through websocket */
+
+  const isTerminal = req.url.includes("/terminal");
+
+  if (isTerminal) {
+    console.log("Incoming Url ", req.url);
+    const projectId = req.url.split("=")[1];
+    console.log("Project Id received after Connection", projectId);
+    //after that we create our container
+    handleContainerCreate(
+      projectId,
+      webSocketForTerminal,
+      req,
+      tcpSocket,
+      head
+    );
+
+    webSocketForTerminal.handleUpgrade(req, tcpSocket, head, async (ws) => {
+      console.log("WebSocket upgrade completed");
+
+      // Create container
+      const container = await handleContainerCreate(projectId);
+
+      // Pass connection to the WebSocket server
+      webSocketForTerminal.emit("connection", ws, req, container);
+    });
+  }
+});
+
+//listen the websocket connection
+webSocketForTerminal.on("connection", (ws, req, container) => {
+  console.log("Websocket Connected");
+  //helps in proceessing of streamed output which are comes from the container
+  //and sent this to client
+  handleTerminalCreation(container, ws);
+
+  ws.on("close", () => {
+    container.remove({ force: true }, (err, data) => {
+      if (err) {
+        console.log("error While Removing Container", err);
+      }
+      console.log("Container Removed sucessFully", data);
+    });
+  });
 });
