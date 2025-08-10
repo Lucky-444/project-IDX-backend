@@ -27,10 +27,10 @@ export const handleContainerCreate = async (
 
     console.log("Existing container", existingContainer);
 
-    if (existingContainer.length > 0) {
+    if (existingContainer?.length > 0) {
       console.log("Container already exists, stopping and removing it");
       const container = docker.getContainer(existingContainer[0].Id);
-      await container.remove({ force: true });
+      await container?.remove({ force: true });
     }
 
     console.log("Creating a new container");
@@ -73,14 +73,6 @@ export const handleContainerCreate = async (
     await container.start();
 
     console.log("container started");
-
-    //convert http connection to an ws connection
-    // Below is the place where we upgrade the connection to websocket
-    // terminalSocket.handleUpgrade(req, tcpSocket, head, (establishedWSConn) => {
-    //     console.log("Connection upgraded to websocket");
-    //     terminalSocket.emit("connection", establishedWSConn, req, container);
-    // });
-
     
     return container;
   } catch (error) {

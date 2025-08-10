@@ -1,5 +1,5 @@
 export const handleTerminalCreation = (container, ws) => {
-  container.exec(
+  container?.exec(
     {
       Cmd: ["/bin/bash"],
       AttachStdin: true,
